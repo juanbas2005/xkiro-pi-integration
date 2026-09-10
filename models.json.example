@@ -1,0 +1,10 @@
+{
+  "providers": {
+    "xkiro": {
+      "baseUrl": "https://api.xkiro.com/v1",
+      "api": "openai-completions",
+      "apiKey": "sk-xt-REEMPLAZA_CON_TU_API_KEY",
+      "models": []
+    }
+  }
+}
