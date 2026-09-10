@@ -611,3 +611,37 @@ Cuando `defaultModel` está **ausente**, pi arranca con el último modelo de tu 
 | Que SIEMPRE arranque con un modelo fijo | `"xkiro"` | `"deepseek/deepseek-v4-flash"` |
 | Que pregunte cada vez | *omitir* | *omitir* |
 
+
+---
+
+## Fijar Ponytail en ultra de forma permanente
+
+Ponytail expone `/ponytail lite|full|ultra|off` y, por defecto, cada sesión arranca en `full`. Para que siempre arranque en `ultra`:
+
+### Opción 1: marcarlo en el skill (recomendado)
+
+Edita el skill en `~/.pi/agent/git/github.com/DietrichGebert/ponytail/skills/ponytail/SKILL.md` y cambia la línea:
+
+```markdown
+Default: **full**.
+```
+
+por:
+
+```markdown
+Default: **ultra**.
+```
+
+(Si reinstalas Ponytail con `pi install ...`, se sobrescribirá. Para hacerlo persistente, edita tras cada install o usa la opción 2.)
+
+### Opción 2: alias de shell
+
+```bash
+# en ~/.bashrc o equivalente
+alias pi='pi --skill ponytail:ultra'
+# o más simple: lanzar pi con un prompt inicial que active ultra
+alias pi='pi -p "/ponytail ultra"'
+```
+
+La primera variante no existe como flag en pi todavía; la segunda funciona pero pi se queda sin prompt interactivo. **La opción 1 es la más limpia**.
+
