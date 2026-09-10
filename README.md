@@ -17,6 +17,7 @@ Este repositorio contiene todo lo necesario para que el comando `/model` de `pi`
 - [Estructura del models.json](#estructura-del-modelsjson)
 - [Catálogo de modelos gratuitos](#catálogo-de-modelos-gratuitos)
 - [Uso desde la TUI](#uso-desde-la-tui-de-pi)
+- [Persistir el modelo entre sesiones](#persistir-el-modelo-entre-sesiones)
 - [Uso por línea de comandos (--model)](#uso-por-línea-de-comandos---model)
 - [Troubleshooting](#troubleshooting)
 - [Buenas prácticas y seguridad](#buenas-prácticas-y-seguridad)
@@ -545,4 +546,49 @@ pi --provider xkiro --model deepseek/deepseek-v4-flash
 ```
 
 ---
+
+
+---
+
+## Persistir el modelo entre sesiones
+
+Pi **no** recuerda automáticamente el último modelo que usaste en una sesión — hay que guardarlo explícitamente.
+
+### Método 1: dentro de la TUI (recomendado)
+
+1. Abre `/model`.
+2. Filtra escribiendo, p. ej. `xkiro`.
+3. Navega al modelo que quieras y selecciónalo con **Enter** (sólo cambia esta sesión).
+4. Para **persistirlo** entre sesiones: repite y, **antes** de confirmar, pulsa **`Ctrl+S`**.
+
+Pi escribe `defaultProvider` y `defaultModel` en `~/.pi/agent/settings.json`. La próxima vez que abras pi, arrancará ya con ese modelo.
+
+> Si seleccionas con Enter pero **sin** pulsar Ctrl+S, el cambio dura solo la sesión actual. Al cerrar, se pierde. Esto es por diseño — te da un "modo prueba" sin tocar tu config.
+
+### Método 2: editar settings.json a mano
+
+```json
+{
+  "defaultProvider": "xkiro",
+  "defaultModel": "deepseek/deepseek-v4-flash"
+}
+```
+
+Equivalente a Ctrl+S pero sin abrir la TUI. Útil para scripts o dotfiles.
+
+### Por qué tu pi puede estar "olvidando" el último modelo
+
+Tres causas habituales:
+
+1. **Estás pulsando Enter sin Ctrl+S** en `/model`. → Solución: pulsa `Ctrl+S` siempre.
+2. **`settings.json` tiene un `defaultProvider` que no es xkiro** (p. ej. `"opencode"`) y por eso arranca con ése. → Solución: cambiarlo al método 2.
+3. **Una extensión `registerProvider` machaca el provider antes de leer settings.** → Solución: borrar la extensión (ver [Troubleshooting](#troubleshooting)).
+
+### Verificar la config actual
+
+```bash
+cat ~/.pi/agent/settings.json | grep -A1 default
+```
+
+Debe mostrar `"defaultProvider": "xkiro"` y un `defaultModel` que exista en tu `models.json`.
 
