@@ -325,12 +325,11 @@ Edita `~/.pi/agent/settings.json`:
 
 ```json
 {
-  "defaultProvider": "xkiro",
-  "defaultModel": "deepseek/deepseek-v4-flash"
+  "defaultProvider": "xkiro"
 }
 ```
 
-Al siguiente `pi` arrancará ya con ese modelo.
+> Sin `defaultModel`, pi recuerda el último modelo de la sesión anterior. Si quieres uno fijo, añádelo: `"defaultModel": "deepseek/deepseek-v4-flash"` (ver [esta nota](#-si-quieres-que-pi-recuerde-el-último-modelo-entre-sesiones)).
 
 ### Login persistente
 
@@ -569,12 +568,11 @@ Pi escribe `defaultProvider` y `defaultModel` en `~/.pi/agent/settings.json`. La
 
 ```json
 {
-  "defaultProvider": "xkiro",
-  "defaultModel": "deepseek/deepseek-v4-flash"
+  "defaultProvider": "xkiro"
 }
 ```
 
-Equivalente a Ctrl+S pero sin abrir la TUI. Útil para scripts o dotfiles.
+Equivalente a Ctrl+S pero sin abrir la TUI. Útil para scripts o dotfiles. Para fijar un modelo concreto, añade `defaultModel`.
 
 ### Por qué tu pi puede estar "olvidando" el último modelo
 
@@ -591,4 +589,25 @@ cat ~/.pi/agent/settings.json | grep -A1 default
 ```
 
 Debe mostrar `"defaultProvider": "xkiro"` y un `defaultModel` que exista en tu `models.json`.
+
+
+### ⚠️ Si quieres que pi RECUERDE el último modelo entre sesiones
+
+No pongas `defaultModel` en `settings.json`. Déjalo solo así:
+
+```json
+{
+  "defaultProvider": "xkiro"
+}
+```
+
+Cuando `defaultModel` está **ausente**, pi arranca con el último modelo de tu sesión anterior. Cuando **está presente**, siempre gana sobre el historial.
+
+### Cuándo usar cada variante
+
+| Quieres... | `defaultProvider` | `defaultModel` |
+|---|---|---|
+| Que recuerde el último modelo (recomendado) | `"xkiro"` | *omitir* |
+| Que SIEMPRE arranque con un modelo fijo | `"xkiro"` | `"deepseek/deepseek-v4-flash"` |
+| Que pregunte cada vez | *omitir* | *omitir* |
 
